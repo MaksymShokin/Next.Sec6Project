@@ -6,18 +6,17 @@ import EventSummary from '../../components/event-detail/event-summary';
 import EventLogistics from '../../components/event-detail/event-logistics';
 import EventContent from '../../components/event-detail/event-content';
 import ErrorAlert from '../../components/ui/error-alert';
+import {
+  getAllEvents,
+  getFeaturedEvents
+} from '../../helpers/getDataFromFirebase';
 
-function EventDetailPage() {
-  const router = useRouter();
-
-  const eventId = router.query.eventId;
-  const event = getEventById(eventId);
-
+function EventDetailPage({ event }) {
   if (!event) {
     return (
-      <ErrorAlert>
-        <p>No event found!</p>
-      </ErrorAlert>
+      <div className='center'>
+        <p>Loading</p>
+      </div>
     );
   }
 
@@ -36,5 +35,39 @@ function EventDetailPage() {
     </Fragment>
   );
 }
+
+export const getStaticProps = async ({ params }) => {
+  const data = await getAllEvents();
+  const event = data.find(elem => elem.id === params.eventId);
+
+  if (!event) {
+    return {
+      notFound: true
+    };
+  }
+
+  return {
+    props: {
+      event
+    }
+  };
+};
+
+export const getStaticPaths = async () => {
+  const data = await getFeaturedEvents();
+
+  const ids = data.map(({ id }) => id);
+
+  const paths = ids.map(id => ({
+    params: {
+      eventId: id
+    }
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking'
+  };
+};
 
 export default EventDetailPage;
