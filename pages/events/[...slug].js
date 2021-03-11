@@ -6,6 +6,7 @@ import EventList from '../../components/events/event-list';
 import ResultsTitle from '../../components/events/results-title';
 import Button from '../../components/ui/button';
 import ErrorAlert from '../../components/ui/error-alert';
+import Head from 'next/head';
 
 function FilteredEventsPage({ events, year, month }) {
   // client side render also possible
@@ -39,6 +40,10 @@ function FilteredEventsPage({ events, year, month }) {
 
   return (
     <Fragment>
+      <Head>
+        <title>Filters</title>
+        <meta name='description' content="Filter events" />
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={events} />
     </Fragment>
@@ -61,7 +66,7 @@ export const getServerSideProps = async context => {
     return {
       props: {
         events: 'Invalid filters'
-      },
+      }
       // notFound: true,
       // redirect: {
       //   destination: '/error'

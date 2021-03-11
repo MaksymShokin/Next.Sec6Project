@@ -1,5 +1,6 @@
 import EventList from '../components/events/event-list';
 import { getFeaturedEvents } from '../helpers/getDataFromFirebase';
+import Head from 'next/head';
 
 function HomePage({ featuredEvents }) {
   if (!featuredEvents) {
@@ -8,6 +9,10 @@ function HomePage({ featuredEvents }) {
 
   return (
     <div>
+      <Head>
+        <title>Next JS</title>
+        <meta name='description' content='Super description' />
+      </Head>
       <EventList items={featuredEvents} />
     </div>
   );
